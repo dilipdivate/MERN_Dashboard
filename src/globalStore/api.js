@@ -75,6 +75,15 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    postForgotPassword: build.mutation({
+      query: (payload) => ({
+        url: `general/user`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -90,4 +99,5 @@ export const {
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
   usePostUserMutation,
+  usePostForgotPasswordMutation,
 } = apiSlice;
