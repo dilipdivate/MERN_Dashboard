@@ -15,3 +15,5 @@ npm i @nivo/core @nivo/bar @nivo/geo @nivo/line @nivo/pie
 # Step 3: Add Sidebar
 
 # Step 4: Add Routes in App file and create store in index file
+
+# Step 5:
