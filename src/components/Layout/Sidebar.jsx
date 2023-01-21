@@ -103,6 +103,7 @@ const Sidebar = ({
   const navigate = useNavigate();
   const theme = useTheme();
 
+  console.log("User Details:", user);
   useEffect(() => {
     setActive(pathname.substring(1));
   }, [pathname]);

@@ -7,6 +7,16 @@ import { useSelector } from "react-redux";
 import { themeSettings } from "theme";
 import Layout from "components/Layout";
 import Dashboard from "components/Dashboard/index.jsx";
+import Products from "components/ClientFacing/Products.jsx";
+import Customers from "components/ClientFacing/Customers.jsx";
+import Transactions from "components/ClientFacing/Transactions.jsx";
+import Geography from "components/ClientFacing/Geography.jsx";
+import Overview from "components/Sales/Overview.jsx";
+import Daily from "components/Sales/Daily.jsx";
+import Monthly from "components/Sales/Monthly.jsx";
+import Breakdown from "components/Sales/Breakdown.jsx";
+import Admin from "components/management/Admin.jsx";
+import Performance from "components/management/Performance.jsx";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -20,7 +30,7 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              {/* <Route path="/products" element={<Products />} />
+              <Route path="/products" element={<Products />} />
               <Route path="/customers" element={<Customers />} />
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/geography" element={<Geography />} />
@@ -29,7 +39,7 @@ function App() {
               <Route path="/monthly" element={<Monthly />} />
               <Route path="/breakdown" element={<Breakdown />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/performance" element={<Performance />} /> */}
+              <Route path="/performance" element={<Performance />} />
             </Route>
           </Routes>
         </ThemeProvider>

@@ -6,15 +6,15 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-// import { api } from "globalStore/api";
+import { api } from "globalStore/api";
 import globalReducer from "globalStore";
 
 const store = configureStore({
   reducer: {
     global: globalReducer,
-    // [api.reducerPath]: api.reducer,
+    [api.reducerPath]: api.reducer,
   },
-  // middleware: (getDefault) => getDefault().concat(api.middleware),
+  middleware: (getDefault) => getDefault().concat(api.middleware),
 });
 setupListeners(store.dispatch);
 
