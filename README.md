@@ -14,8 +14,22 @@ npm i @nivo/core @nivo/bar @nivo/geo @nivo/line @nivo/pie
 
 # Step 3: Add Sidebar
 
-# Step 4: Add Routes in App file and create store in index file
+# Step 4: Add-Routes in app file and RTK-Query store in index file
 
-# Step 5: Add Routes in Api file to connect backend
+https://www.positronx.io/react-post-data-with-redux-toolkit-rtk-query-tutorial/
 
-# Step 6: Add Routes in Api file to connect backend
+https://codevoweb.com/react-crud-example-with-redux-toolkit-rtk-query/
+
+https://redux-toolkit.js.org/rtk-query/usage/queries
+
+# Step 5: Add Routes in Api file to connect backend in api file
+
+# Step 6: Fix-sidebar-and-navbar
+
+# Step 7: Add-Product,-Customer,-Transactions-page
+
+# Step 8: Create-Breakdown,-Daily,-Monthly,-Overview-and-Geography-Pages
+
+# Step 9: Add-Admin,-Performance-Pages
+
+# Step 10: Add Signin and signup pages, add api routes for the same.

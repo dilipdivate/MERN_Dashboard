@@ -17,6 +17,9 @@ import Monthly from "components/Sales/Monthly.jsx";
 import Breakdown from "components/Sales/Breakdown.jsx";
 import Admin from "components/management/Admin.jsx";
 import Performance from "components/management/Performance.jsx";
+import ForgotPassword from "components/authentication/ForgotPassword.jsx";
+import Signin from "components/authentication/Signin.jsx";
+import Signup from "components/authentication/Signup.jsx";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -40,6 +43,10 @@ function App() {
               <Route path="/breakdown" element={<Breakdown />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/performance" element={<Performance />} />
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/signup" element={<Signup />} />
+
+              <Route path="/forgotPassword" element={<ForgotPassword />} />
             </Route>
           </Routes>
         </ThemeProvider>
