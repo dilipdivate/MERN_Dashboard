@@ -16,4 +16,6 @@ npm i @nivo/core @nivo/bar @nivo/geo @nivo/line @nivo/pie
 
 # Step 4: Add Routes in App file and create store in index file
 
-# Step 5:
+# Step 5: Add Routes in Api file to connect backend
+
+# Step 6: Add Routes in Api file to connect backend
