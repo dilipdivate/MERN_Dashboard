@@ -15,7 +15,12 @@ export const apiSlice = createApi({
     "Dashboard",
   ],
   endpoints: (build) => ({
-    getUser: build.query({
+    getCustomers: build.query({
+      query: () => "general/user",
+      providesTags: ["Customers"],
+    }),
+
+    getUserById: build.query({
       query: (id) => ({
         url: `general/user/${id}`,
         method: "GET",
@@ -29,14 +34,133 @@ export const apiSlice = createApi({
       }),
       providesTags: ["User"],
     }),
+    postUser: build.mutation({
+      query: (payload) => ({
+        url: `general/user`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    putUser: build.mutation({
+      query: (id, payload) => ({
+        url: `general/user/${id}`,
+        method: "PUT",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    deleteUser: build.mutation({
+      query: (id) => ({
+        url: `general/user/${id}`,
+        method: "DELETE",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    postSignin: build.mutation({
+      query: (payload) => ({
+        url: `general/user/signin`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    postForgotPassword: build.mutation({
+      query: (payload) => ({
+        url: `general/user/forgot-password`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    postResetPassword: build.mutation({
+      query: (payload) => ({
+        url: `general/user/reset-password`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    postVerifyEmail: build.mutation({
+      query: (payload) => ({
+        url: `general/user/verify-email`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    postValidateToken: build.mutation({
+      query: (payload) => ({
+        url: `general/user/validate-reset-token`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    postRefreshToken: build.mutation({
+      query: (payload) => ({
+        url: `general/user/refresh-token`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
+    postRevokeToken: build.mutation({
+      query: (payload) => ({
+        url: `general/user/revoke-token`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["User"],
+    }),
     getProducts: build.query({
       // query: () => "client/products",
       query: () => ({ url: "client/products", method: "GET" }),
       providesTags: ["Products"],
     }),
-    getCustomers: build.query({
-      query: () => "client/customers",
-      providesTags: ["Customers"],
+
+    getProductsById: build.query({
+      query: (id) => ({
+        url: `client/products/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Products"],
+    }),
+    postProduct: build.mutation({
+      query: (payload) => ({
+        url: `client/products`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    putProduct: build.mutation({
+      query: (id, payload) => ({
+        url: `client/products/${id}`,
+        method: "PUT",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    deleteProduct: build.mutation({
+      query: (id) => ({
+        url: `client/products/${id}`,
+        method: "DELETE",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["Products"],
     }),
     getTransactions: build.query({
       query: ({ page, pageSize, sort, search }) => ({
@@ -46,12 +170,46 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Transactions"],
     }),
+
+    getTransactionById: build.query({
+      query: (id) => ({
+        url: `client/transactions/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Transactions"],
+    }),
+    postTransaction: build.mutation({
+      query: (payload) => ({
+        url: `client/transactions`,
+        method: "POST",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["Transactions"],
+    }),
+    putTransaction: build.mutation({
+      query: (id, payload) => ({
+        url: `client/transactions/${id}`,
+        method: "PUT",
+        body: payload,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["Transactions"],
+    }),
+    deleteTransaction: build.mutation({
+      query: (id) => ({
+        url: `client/transactions/${id}`,
+        method: "DELETE",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+      invalidatesTags: ["Transactions"],
+    }),
     getGeography: build.query({
       query: () => "client/geography",
       providesTags: ["Geography"],
     }),
     getSales: build.query({
-      query: () => "sales/sales",
+      query: () => "sales",
       providesTags: ["Sales"],
     }),
     getAdmins: build.query({
@@ -66,38 +224,39 @@ export const apiSlice = createApi({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
-    postUser: build.mutation({
-      query: (payload) => ({
-        url: `general/user`,
-        method: "POST",
-        body: payload,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
-      invalidatesTags: ["User"],
-    }),
-    postForgotPassword: build.mutation({
-      query: (payload) => ({
-        url: `general/user`,
-        method: "POST",
-        body: payload,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
-      invalidatesTags: ["User"],
-    }),
   }),
 });
 
 export const {
-  useGetUserQuery,
-  useGetUserByEmailQuery,
-  useGetProductsQuery,
   useGetCustomersQuery,
+  useGetUserByIdQuery,
+  useGetUserByEmailQuery,
+  usePostUserMutation,
+  usePutUserMutation,
+  useDeleteUserMutation,
+  usePostSigninMutation,
+  usePostForgotPasswordMutation,
+  usePostResetPasswordMutation,
+  usePostVerifyEmailMutation,
+  usePostValidateTokenMutation,
+  usePostRefreshTokenMutation,
+  usePostRevokeTokenMutation,
+
+  useGetProductsQuery,
+  useGetProductsByIdQuery,
+  usePutProductMutation,
+  usePostProductMutation,
+  useDeleteProductMutation,
+
   useGetTransactionsQuery,
+  useGetTransactionByIdQuery,
+  usePutTransactionMutation,
+  usePostTransactionMutation,
+  useDeleteTransactionMutation,
+
   useGetGeographyQuery,
   useGetSalesQuery,
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
-  usePostUserMutation,
-  usePostForgotPasswordMutation,
 } = apiSlice;

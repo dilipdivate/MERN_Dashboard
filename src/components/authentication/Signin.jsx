@@ -12,24 +12,36 @@ import Box from "@mui/material/Box";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Link as ReactLink } from "react-router-dom";
-import { useGetUserByEmailQuery } from "globalStore/api";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { usePostSigninMutation } from "globalStore/api";
 import { useSelector } from "react-redux";
 
 export default function Signin() {
+  const [sent, setSent] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
+  const navigate = useNavigate();
   const email = useSelector((state) => state.global.email);
 
-  const { data } = useGetUserByEmailQuery(email);
-  console.log("Dfffff", data);
+  const [postSignin, response] = usePostSigninMutation();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const resp = new FormData(event.currentTarget);
-    console.log({
-      email: resp.get("email"),
-      password: resp.get("password"),
-    });
-    const email = resp.get("email");
+    const data = new FormData(event.currentTarget);
+
+    setSent(true);
+    setSubmitting(true);
+
+    const resp = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+
+    postSignin(resp)
+      .unwrap()
+      .then((error) => {
+        console.log(error);
+      });
+    navigate("/");
   };
 
   return (
@@ -78,8 +90,9 @@ export default function Signin() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={submitting || sent}
           >
-            Sign In
+            {submitting || sent ? "In progress…" : "Sign In"}
           </Button>
           <Grid container>
             <Grid item xs>
@@ -87,6 +100,21 @@ export default function Signin() {
                 Forgot password?
               </Link>
             </Grid>
+            <Grid item xs>
+              <Link href="/resetPassword" variant="body2">
+                Reset password?
+              </Link>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            sx={{
+              marginTop: 3,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "end",
+            }}
+          >
             <Grid item>
               {/* <Link href="" variant="body2">
                   {"Don't have an account? Sign Up"}

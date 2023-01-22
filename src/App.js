@@ -1,5 +1,5 @@
 import "./App.css";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider, Typography, Link } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -20,6 +20,21 @@ import Performance from "components/management/Performance.jsx";
 import ForgotPassword from "components/authentication/ForgotPassword.jsx";
 import Signin from "components/authentication/Signin.jsx";
 import Signup from "components/authentication/Signup.jsx";
+import AddProduct from "components/admin/AddProduct.jsx";
+import Checkout from "components/admin/Checkout.jsx";
+
+function Copyright() {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center">
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -36,6 +51,9 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/customers" element={<Customers />} />
               <Route path="/transactions" element={<Transactions />} />
+              <Route path="/addProduct" element={<AddProduct />} />
+
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/geography" element={<Geography />} />
               <Route path="/overview" element={<Overview />} />
               <Route path="/daily" element={<Daily />} />
@@ -49,6 +67,7 @@ function App() {
               <Route path="/forgotPassword" element={<ForgotPassword />} />
             </Route>
           </Routes>
+          {/* <Copyright /> */}
         </ThemeProvider>
       </BrowserRouter>
     </div>

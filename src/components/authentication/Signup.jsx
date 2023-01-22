@@ -17,14 +17,16 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
 import { usePostUserMutation } from "globalStore/api";
 
 export default function SignUp() {
   const [postUser, response] = usePostUserMutation();
-
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [sent, setSent] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -61,11 +63,15 @@ export default function SignUp() {
       phoneNumber: data.get("phoneNumber"),
     };
 
+    setSent(true);
+    setSubmitting(true);
+
     postUser(resp)
       .unwrap()
       .then((error) => {
         console.log(error);
       });
+    navigate("/");
   };
 
   return (
@@ -92,10 +98,11 @@ export default function SignUp() {
           autoComplete="off"
           sx={{ mt: 3 }}
         >
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="name"
@@ -109,6 +116,7 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="lastname"
@@ -122,6 +130,7 @@ export default function SignUp() {
 
           <TextField
             margin="normal"
+            variant="standard"
             required
             fullWidth
             id="email"
@@ -156,6 +165,7 @@ export default function SignUp() {
               /> */}
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="password"
@@ -189,6 +199,7 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="confirmpassword"
@@ -229,6 +240,7 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="city"
@@ -241,6 +253,7 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="state"
@@ -255,6 +268,7 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="country"
@@ -267,6 +281,7 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
               <TextField
                 margin="normal"
+                variant="standard"
                 required
                 fullWidth
                 name="phoneNumber"
@@ -279,6 +294,7 @@ export default function SignUp() {
           </Grid>
           <TextField
             margin="normal"
+            variant="standard"
             required
             fullWidth
             name="occupation"
@@ -296,8 +312,9 @@ export default function SignUp() {
             fullWidth
             variant="contained"
             sx={{ mt: 2, mb: 2 }}
+            disabled={submitting || sent}
           >
-            Sign Up
+            {submitting || sent ? "In progress…" : "Sign Up"}
           </Button>
           <Grid
             container

@@ -1,7 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  AppBar,
+  Button,
+  Box,
+  Typography,
+  InputBase,
+  Toolbar,
+  Menu,
+  MenuItem,
+  useTheme,
+} from "@mui/material";
+import {
+  ListItemIcon,
   LightModeOutlined,
   DarkModeOutlined,
   Menu as MenuIcon,
@@ -18,27 +35,17 @@ import FlexBetween from "components/Layout/FlexBetween";
 import { useDispatch } from "react-redux";
 import { setMode } from "globalStore";
 import profileImage from "assets/profile.jpeg";
-import {
-  AppBar,
-  Button,
-  Box,
-  Typography,
-  IconButton,
-  InputBase,
-  Toolbar,
-  Menu,
-  MenuItem,
-  useTheme,
-} from "@mui/material";
 
 const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const navigate = useNavigate();
   const [login, setLogin] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
+  const [active, setActive] = useState("");
 
   return (
     <AppBar sx={{ position: "static", background: "none", boxShadow: "none" }}>
@@ -59,6 +66,27 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
               <Search />
             </IconButton>
           </FlexBetween>
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  navigate("/addProduct");
+                  // setActive(Products);
+                }}
+              >
+                Products
+              </ListItemButton>
+
+              <ListItemButton
+                onClick={() => {
+                  navigate("/checkout");
+                  // setActive(Products);
+                }}
+              >
+                Checkout
+              </ListItemButton>
+            </ListItem>
+          </List>
         </FlexBetween>
         {/* RIGHT SIDE */}
 
