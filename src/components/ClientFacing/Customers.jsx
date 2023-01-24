@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, useTheme } from "@mui/material";
-import { useGetCustomersQuery } from "globalStore/api";
+import { useGetCustomersQuery } from "globalStore/dashboardApi";
 import Header from "components/Layout/Header";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -16,8 +16,13 @@ const Customers = () => {
       flex: 1,
     },
     {
-      field: "name",
-      headerName: "Name",
+      field: "firstName",
+      headerName: "First Name",
+      flex: 0.5,
+    },
+    {
+      field: "lastname",
+      headerName: "Last Name",
       flex: 0.5,
     },
     {

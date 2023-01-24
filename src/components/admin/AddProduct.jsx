@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as ReactLink, useNavigate } from "react-router-dom";
-import { usePostProductMutation } from "globalStore/api";
+import { usePostProductMutation } from "globalStore/dashboardApi";
 
 const AddProduct = () => {
   const [postProduct, response] = usePostProductMutation();

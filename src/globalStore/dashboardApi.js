@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { userApi } from "./userApi";
 
-export const apiSlice = createApi({
+export const dashboardApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL }),
   reducerPath: "adminApi",
   tagTypes: [
@@ -24,6 +25,7 @@ export const apiSlice = createApi({
       query: (id) => ({
         url: `general/user/${id}`,
         method: "GET",
+        // credentials: "include",
       }),
       providesTags: ["User"],
     }),
@@ -31,15 +33,17 @@ export const apiSlice = createApi({
       query: (email) => ({
         url: `general/user/${email}`,
         method: "GET",
+        // credentials: "include",
       }),
       providesTags: ["User"],
     }),
     postUser: build.mutation({
       query: (payload) => ({
-        url: `general/user`,
+        url: `auth/register`,
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
@@ -49,6 +53,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
@@ -57,75 +62,111 @@ export const apiSlice = createApi({
         url: `general/user/${id}`,
         method: "DELETE",
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
     postSignin: build.mutation({
       query: (payload) => ({
-        url: `general/user/signin`,
+        url: `auth/signin`,
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
+      }),
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          await dispatch(userApi.endpoints.getMe.initiate(null));
+        } catch (error) {}
+      },
+      invalidatesTags: ["User"],
+    }),
+    postSignout: build.mutation({
+      query: () => ({
+        url: `auth/signout`,
+        method: "POST",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
     postForgotPassword: build.mutation({
       query: (payload) => ({
-        url: `general/user/forgot-password`,
+        url: `auth/forgot-password`,
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
-    postResetPassword: build.mutation({
+    patchResetPassword: build.mutation({
+      query: ({ resetToken, password, passwordConfirm }) => ({
+        url: `auth/reset-password/${resetToken}`,
+        method: "PATCH",
+        body: { password, passwordConfirm },
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    patchChangePassword: build.mutation({
       query: (payload) => ({
-        url: `general/user/reset-password`,
-        method: "POST",
+        url: "auth/change-password",
+        method: "PATCH",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
     postVerifyEmail: build.mutation({
-      query: (payload) => ({
-        url: `general/user/verify-email`,
+      query: (verificationCode) => ({
+        url: `auth/verify-email/?token=${verificationCode}`,
         method: "POST",
-        body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
     postValidateToken: build.mutation({
       query: (payload) => ({
-        url: `general/user/validate-reset-token`,
+        url: `auth/validate-reset-token`,
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
     postRefreshToken: build.mutation({
       query: (payload) => ({
-        url: `general/user/refresh-token`,
+        url: `auth/refresh-token`,
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
     postRevokeToken: build.mutation({
       query: (payload) => ({
-        url: `general/user/revoke-token`,
+        url: `auth/revoke-token`,
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
     getProducts: build.query({
       // query: () => "client/products",
-      query: () => ({ url: "client/products", method: "GET" }),
+      query: () => ({
+        url: "client/products",
+        method: "GET",
+        // credentials: "include",
+      }),
       providesTags: ["Products"],
     }),
 
@@ -133,6 +174,7 @@ export const apiSlice = createApi({
       query: (id) => ({
         url: `client/products/${id}`,
         method: "GET",
+        // credentials: "include",
       }),
       providesTags: ["Products"],
     }),
@@ -142,6 +184,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["Products"],
     }),
@@ -151,6 +194,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["Products"],
     }),
@@ -159,6 +203,7 @@ export const apiSlice = createApi({
         url: `client/products/${id}`,
         method: "DELETE",
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["Products"],
     }),
@@ -166,6 +211,7 @@ export const apiSlice = createApi({
       query: ({ page, pageSize, sort, search }) => ({
         url: "client/transactions",
         method: "GET",
+        // credentials: "include",
         params: { page, pageSize, sort, search },
       }),
       providesTags: ["Transactions"],
@@ -175,6 +221,7 @@ export const apiSlice = createApi({
       query: (id) => ({
         url: `client/transactions/${id}`,
         method: "GET",
+        // credentials: "include",
       }),
       providesTags: ["Transactions"],
     }),
@@ -184,6 +231,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["Transactions"],
     }),
@@ -193,6 +241,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: payload,
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["Transactions"],
     }),
@@ -201,6 +250,7 @@ export const apiSlice = createApi({
         url: `client/transactions/${id}`,
         method: "DELETE",
         headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "include",
       }),
       invalidatesTags: ["Transactions"],
     }),
@@ -235,8 +285,10 @@ export const {
   usePutUserMutation,
   useDeleteUserMutation,
   usePostSigninMutation,
+  usePostSignoutMutation,
   usePostForgotPasswordMutation,
-  usePostResetPasswordMutation,
+  usePatchResetPasswordMutation,
+  usePatchChangePasswordMutation,
   usePostVerifyEmailMutation,
   usePostValidateTokenMutation,
   usePostRefreshTokenMutation,
@@ -259,4 +311,4 @@ export const {
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
-} = apiSlice;
+} = dashboardApi;

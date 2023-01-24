@@ -13,21 +13,19 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as ReactLink, useLocation, useNavigate } from "react-router-dom";
-import { usePostSigninMutation } from "globalStore/dashboardApi";
 import { useSelector } from "react-redux";
 
-export default function Signin() {
+import { usePatchChangePasswordMutation } from "globalStore/dashboardApi";
+
+function ChangePassword() {
   const [sent, setSent] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [errorMsg, setErrorMsg] = React.useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from.pathname || "/dashboard";
-
-  console.log(from);
-  const [postSignin, { isLoading, isError, error, isSuccess }] =
-    usePostSigninMutation();
+  const [patchChangePassword, { isLoading, isError, error, isSuccess }] =
+    usePatchChangePasswordMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -38,10 +36,11 @@ export default function Signin() {
 
     const resp = {
       email: data.get("email"),
-      password: data.get("password"),
+      oldPassword: data.get("oldPassword"),
+      newPassword: data.get("newPassword"),
     };
 
-    await postSignin(resp)
+    patchChangePassword(resp)
       .unwrap()
       .then((response) => {
         console.log("RESP1:", response);
@@ -56,16 +55,12 @@ export default function Signin() {
         setSent(false);
         setSubmitting(false);
       });
-
-    // console.log("DDRESP:", response);
-
-    // navigate("/");
   };
 
   useEffect(() => {
     if (isSuccess) {
       // toast.success('You successfully logged in');
-      navigate(from);
+      navigate("/signin");
     }
     if (isError) {
       if (Array.isArray(error.data.error)) {
@@ -103,7 +98,7 @@ export default function Signin() {
           <LockOpenOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Change Password
         </Typography>
         {errorMsg}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -121,16 +116,23 @@ export default function Signin() {
             margin="normal"
             required
             fullWidth
-            name="password"
-            label="Password"
             type="password"
-            id="password"
-            autoComplete="current-password"
+            id="oldPassword"
+            label="Old Password"
+            name="oldPassword"
+            autoComplete="oldPassword"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            type="password"
+            name="newPassword"
+            label="New Password"
+            id="newPassword"
+            autoComplete="NewPassword"
           />
+
           <Button
             type="submit"
             fullWidth
@@ -138,40 +140,12 @@ export default function Signin() {
             sx={{ mt: 3, mb: 2 }}
             disabled={submitting || sent}
           >
-            {submitting || sent ? "In progress…" : "Sign In"}
+            {submitting || sent ? "In progress…" : "Submit"}
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/forgotPassword" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item xs>
-              <Link href="/changePassword" variant="body2">
-                Change password?
-              </Link>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            sx={{
-              marginTop: 3,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "end",
-            }}
-          >
-            <Grid item>
-              {/* <Link href="" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link> */}
-              <ReactLink underline="none" to="/Signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </ReactLink>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
   );
 }
+
+export default ChangePassword;

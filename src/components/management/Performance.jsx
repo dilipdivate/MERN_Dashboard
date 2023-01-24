@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, useTheme } from "@mui/material";
-import { useGetUserPerformanceQuery } from "globalStore/api";
+import { useGetUserPerformanceQuery } from "globalStore/dashboardApi";
 import { useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "components/Layout/Header";

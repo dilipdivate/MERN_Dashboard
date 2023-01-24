@@ -12,7 +12,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import Header from "components/Layout/Header";
-import { useGetProductsQuery } from "globalStore/api";
+import { useGetProductsQuery } from "globalStore/dashboardApi";
 
 // Get Props from model which we display in Product
 const Product = ({

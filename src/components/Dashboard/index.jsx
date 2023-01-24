@@ -19,7 +19,7 @@ import FlexBetween from "components/Layout/FlexBetween";
 import Header from "components/Layout/Header";
 import BreakdownChart from "components/Layout/BreakdownChart";
 import OverviewChart from "components/Layout/OverviewChart";
-import { useGetDashboardQuery } from "globalStore/api";
+import { useGetDashboardQuery } from "globalStore/dashboardApi";
 import StatBox from "components/Layout/StatBox";
 
 const Dashboard = () => {

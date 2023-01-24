@@ -12,22 +12,30 @@ import Box from "@mui/material/Box";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Link as ReactLink, useLocation, useNavigate } from "react-router-dom";
-import { usePostSigninMutation } from "globalStore/dashboardApi";
+import {
+  Link as ReactLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function Signin() {
+import { usePatchResetPasswordMutation } from "globalStore/dashboardApi";
+
+function ResetPassword() {
   const [sent, setSent] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [errorMsg, setErrorMsg] = React.useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from.pathname || "/dashboard";
+  const params = useParams();
 
-  console.log(from);
-  const [postSignin, { isLoading, isError, error, isSuccess }] =
-    usePostSigninMutation();
+  // console.log("Params", params);
+  // console.log("location", location.search.split("=")[1]);
+
+  const [patchResetPassword, { isLoading, isError, error, isSuccess }] =
+    usePatchResetPasswordMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,11 +45,12 @@ export default function Signin() {
     setSubmitting(true);
 
     const resp = {
-      email: data.get("email"),
       password: data.get("password"),
+      passwordConfirm: data.get("passwordConfirm"),
+      resetToken: location.search.split("=")[1],
     };
 
-    await postSignin(resp)
+    patchResetPassword(resp)
       .unwrap()
       .then((response) => {
         console.log("RESP1:", response);
@@ -56,16 +65,12 @@ export default function Signin() {
         setSent(false);
         setSubmitting(false);
       });
-
-    // console.log("DDRESP:", response);
-
-    // navigate("/");
   };
 
   useEffect(() => {
     if (isSuccess) {
       // toast.success('You successfully logged in');
-      navigate(from);
+      navigate("/signin");
     }
     if (isError) {
       if (Array.isArray(error.data.error)) {
@@ -103,34 +108,35 @@ export default function Signin() {
           <LockOpenOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Reset Password
         </Typography>
         {errorMsg}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
+            variant="standard"
             required
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            // type="password"
             id="password"
             autoComplete="current-password"
+            type="password"
+            autoFocus
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+          <TextField
+            margin="normal"
+            variant="standard"
+            required
+            fullWidth
+            name="passwordConfirm"
+            label="Confirm Password"
+            type="password"
+            id="passwordConfirm"
+            autoComplete="current-password"
           />
+
           <Button
             type="submit"
             fullWidth
@@ -138,40 +144,12 @@ export default function Signin() {
             sx={{ mt: 3, mb: 2 }}
             disabled={submitting || sent}
           >
-            {submitting || sent ? "In progress…" : "Sign In"}
+            {submitting || sent ? "In progress…" : "Submit"}
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/forgotPassword" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item xs>
-              <Link href="/changePassword" variant="body2">
-                Change password?
-              </Link>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            sx={{
-              marginTop: 3,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "end",
-            }}
-          >
-            <Grid item>
-              {/* <Link href="" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link> */}
-              <ReactLink underline="none" to="/Signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </ReactLink>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
   );
 }
+
+export default ResetPassword;

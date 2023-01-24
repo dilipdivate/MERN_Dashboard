@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Box, useTheme } from "@mui/material";
 import Header from "components/Layout/Header";
 import { ResponsiveLine } from "@nivo/line";
-import { useGetSalesQuery } from "globalStore/api";
+import { useGetSalesQuery } from "globalStore/dashboardApi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 

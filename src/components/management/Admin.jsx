@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, useTheme } from "@mui/material";
-import { useGetAdminsQuery } from "globalStore/api";
+import { useGetAdminsQuery } from "globalStore/dashboardApi";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "components/Layout/Header";
 import CustomColumnMenu from "components/Layout/DataGridCustomColumnMenu";
@@ -16,8 +16,13 @@ const Admin = () => {
       flex: 1,
     },
     {
-      field: "name",
-      headerName: "Name",
+      field: "firstname",
+      headerName: "First Name",
+      flex: 0.5,
+    },
+    {
+      field: "lastName",
+      headerName: "Last Name",
       flex: 0.5,
     },
     {

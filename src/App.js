@@ -22,6 +22,12 @@ import Signin from "components/authentication/Signin.jsx";
 import Signup from "components/authentication/Signup.jsx";
 import AddProduct from "components/admin/AddProduct.jsx";
 import Checkout from "components/admin/Checkout.jsx";
+import CheckUser from "components/Layout/CheckUser.jsx";
+import Profile from "components/Layout/Profile.jsx";
+import Signout from "components/authentication/Signout.jsx";
+import VerifyEmail from "components/authentication/VerifyEmail.jsx";
+import ResetPassword from "components/authentication/ResetPassword.jsx";
+import ChangePassword from "components/authentication/ChangePassword.jsx";
 
 function Copyright() {
   return (
@@ -45,27 +51,36 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/customers" element={<Customers />} />
-              <Route path="/transactions" element={<Transactions />} />
-              <Route path="/addProduct" element={<AddProduct />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Navigate to="/signin" replace />} />
+              {/* <Route element={<CheckUser allowedRoles={["user", "admin"]} />}> */}
+              <Route path="profile" element={<Profile />} />
+              {/* </Route> */}
+              {/* <Route element={<CheckUser allowedRoles={["admin"]} />}> */}
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="products" element={<Products />} />
+              <Route path="customers" element={<Customers />} />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="addProduct" element={<AddProduct />} />
 
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/geography" element={<Geography />} />
-              <Route path="/overview" element={<Overview />} />
-              <Route path="/daily" element={<Daily />} />
-              <Route path="/monthly" element={<Monthly />} />
-              <Route path="/breakdown" element={<Breakdown />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/performance" element={<Performance />} />
-              <Route path="/signin" element={<Signin />} />
-              <Route path="/signup" element={<Signup />} />
-
-              <Route path="/forgotPassword" element={<ForgotPassword />} />
+              <Route path="checkout" element={<Checkout />} />
+              <Route path="geography" element={<Geography />} />
+              <Route path="overview" element={<Overview />} />
+              <Route path="daily" element={<Daily />} />
+              <Route path="monthly" element={<Monthly />} />
+              <Route path="breakdown" element={<Breakdown />} />
+              <Route path="admin" element={<Admin />} />
+              <Route path="performance" element={<Performance />} />
+              {/* </Route> */}
             </Route>
+
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signout" element={<Signout />} />
+            <Route path="/verifyEmail" element={<VerifyEmail />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="/changePassword" element={<ChangePassword />} />
           </Routes>
           {/* <Copyright /> */}
         </ThemeProvider>

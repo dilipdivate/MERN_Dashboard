@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useEffect } from "react";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 
@@ -18,11 +19,15 @@ import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as ReactLink, useNavigate } from "react-router-dom";
-import { usePostUserMutation } from "globalStore/api";
+import { usePostUserMutation } from "globalStore/dashboardApi";
+import VerifyEmail from "./VerifyEmail.jsx";
 
 export default function SignUp() {
-  const [postUser, response] = usePostUserMutation();
+  const [postUser, { isLoading, isError, error, isSuccess }] =
+    usePostUserMutation();
+  const [errorMsg, setErrorMsg] = React.useState([]);
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [sent, setSent] = React.useState(false);
@@ -45,17 +50,19 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
 
     const password = data.get("password");
-    const confirmpassword = data.get("confirmpassword");
+    const passwordConfirm = data.get("passwordConfirm");
     console.log(password);
-    console.log(confirmpassword);
-    // if (password !== confirmpassword) {
+    console.log(passwordConfirm);
+    // if (password !== passwordConfirm) {
     //   alert("passwords don't match");
     //   return;
     // }
     const resp = {
-      name: data.get("name"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
       email: data.get("email"),
       password: data.get("password"),
+      passwordConfirm: data.get("passwordConfirm"),
       city: data.get("city"),
       state: data.get("state"),
       country: data.get("country"),
@@ -68,11 +75,54 @@ export default function SignUp() {
 
     postUser(resp)
       .unwrap()
+      .then((response) => {
+        console.log("RESP1:", response);
+        setSent(false);
+        setSubmitting(false);
+        navigate({
+          pathname: "/verifyEmail",
+          search: `?token=${response.verificationToken}`,
+        });
+      })
       .then((error) => {
         console.log(error);
+      })
+      .catch((error) => {
+        setSent(false);
+        setSubmitting(false);
       });
-    navigate("/");
+    // console.log("DDRESP:", response);
   };
+
+  useEffect(() => {
+    // if (isSuccess) {
+    //   // toast.success('You successfully logged in');
+    //   navigate("/verifyEmail");
+    // }
+    if (isError) {
+      if (Array.isArray(error.data.error)) {
+        error.data.error.forEach((el) =>
+          // toast.error(el.message, {
+          //   position: 'top-right',
+          // })
+
+          {
+            console.log(el);
+            setErrorMsg(...errorMsg, el.message);
+            setSent(false);
+            setErrorMsg(el.message);
+          }
+        );
+      } else {
+        // toast.error((error as any).data.message, {
+        //   position: 'top-right',
+        // });
+        setErrorMsg(error.data.message);
+        console.log("DILIPEL2::", error);
+        console.log(error.data.message);
+      }
+    }
+  }, [isLoading]);
 
   return (
     <Container component="main">
@@ -91,6 +141,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+        {errorMsg}
         <Box
           component="form"
           onSubmit={handleSubmit}
@@ -105,10 +156,10 @@ export default function SignUp() {
                 variant="standard"
                 required
                 fullWidth
-                name="name"
-                label="Name"
+                name="firstName"
+                label="First Name"
                 type="text"
-                id="name"
+                id="firstName"
                 helperText="Incorrect entry."
                 autoFocus
               />
@@ -119,11 +170,10 @@ export default function SignUp() {
                 variant="standard"
                 required
                 fullWidth
-                name="lastname"
+                name="lastName"
                 label="Last Name"
                 type="text"
-                id="lastname"
-                autoFocus
+                id="lastName"
               />
             </Grid>
           </Grid>
@@ -202,24 +252,24 @@ export default function SignUp() {
                 variant="standard"
                 required
                 fullWidth
-                name="confirmpassword"
+                name="passwordConfirm"
                 label="Confirm Password"
                 type="password"
-                id="confirmpassword"
+                id="passwordConfirm"
                 autoComplete="current-password"
               />
               {/* <FormControl sx={{ mt: 2, width: "30ch" }} variant="outlined">
-                <InputLabel htmlFor="confirmpassword">
+                <InputLabel htmlFor="passwordConfirm">
                   Confirm Password
                 </InputLabel>
 
                 <OutlinedInput
-                  id="confirmpassword"
+                  id="passwordConfirm"
                   type={showConfirmPassword ? "text" : "password"}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle confirmpassword visibility"
+                        aria-label="toggle passwordConfirm visibility"
                         onClick={handleClickShowConfirmPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
@@ -247,7 +297,6 @@ export default function SignUp() {
                 label="City"
                 type="text"
                 id="city"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -260,7 +309,6 @@ export default function SignUp() {
                 label="State"
                 type="text"
                 id="state"
-                autoFocus
               />
             </Grid>
           </Grid>
@@ -275,7 +323,6 @@ export default function SignUp() {
                 label="Country"
                 type="text"
                 id="country"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -288,7 +335,6 @@ export default function SignUp() {
                 label="Phone"
                 type="text"
                 id="phoneNumber"
-                autoFocus
               />
             </Grid>
           </Grid>
@@ -301,7 +347,6 @@ export default function SignUp() {
             label="Occupation"
             type="text"
             id="occupation"
-            autoFocus
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
