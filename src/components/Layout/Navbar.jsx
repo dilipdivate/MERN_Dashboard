@@ -57,7 +57,12 @@ const Navbar = ({ user, checkLoggedIn, isSidebarOpen, setIsSidebarOpen }) => {
   const [active, setActive] = useState("");
   const open = Boolean(anchorEl);
 
-  const handleLogoff = () => {
+  const handleLogoff = (e) => {
+    e.preventDefault();
+    // cookies.remove("token");
+    // cookies.remove("access-token");
+    // cookies.remove("refresh-token");
+    // cookies.remove("access-token");
     postSignout()
       .unwrap()
       .then((response) => {
